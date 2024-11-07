@@ -1,16 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'home_screen.dart';
-import 'signup_page.dart';
 
-class LoginPage extends StatelessWidget {
+class SignUpPage extends StatefulWidget {
+  @override
+  _SignUpPageState createState() => _SignUpPageState();
+}
+
+class _SignUpPageState extends State<SignUpPage> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  Future<void> login(BuildContext context) async {
+  Future<void> signUp() async {
     try {
-      await _auth.signInWithEmailAndPassword(
+      await _auth.createUserWithEmailAndPassword(
         email: emailController.text,
         password: passwordController.text,
       );
@@ -19,7 +23,7 @@ class LoginPage extends StatelessWidget {
         MaterialPageRoute(builder: (context) => HomeScreen()),
       );
     } catch (e) {
-      print('Login Failed: $e');
+      print('SignUp Failed: $e');
       // Optionally, show an error message to the user
     }
   }
@@ -27,7 +31,7 @@ class LoginPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Login')),
+      appBar: AppBar(title: Text('Sign Up')),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -42,16 +46,7 @@ class LoginPage extends StatelessWidget {
               obscureText: true,
             ),
             ElevatedButton(
-              onPressed: () => login(context),
-              child: Text('Login'),
-            ),
-            TextButton(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignUpPage()),
-                );
-              },
+              onPressed: signUp,
               child: Text('Sign Up'),
             ),
           ],
